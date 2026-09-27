@@ -39,8 +39,8 @@ server for you to run or pay for.
 
 **One honest caveat:** Supabase pauses free projects after 7 days with zero
 traffic. The site wakes itself up on the next visit (takes ~10–30 seconds the
-first time). If that ever bothers you, a free scheduled ping (e.g. a GitHub
-Actions cron hitting your site weekly) keeps it awake — ask and I'll set that up.
+first time). If that ever becomes annoying, a free scheduled ping (e.g. a GitHub
+Actions cron hitting the site weekly) keeps it awake.
 
 ## Setup (about 20 minutes)
 
@@ -167,8 +167,9 @@ room-rental-site/
 ## FAQ
 
 **Can tenants pay by card instead of Zelle?**
-Not in this version — by design you asked for Zelle-with-manual-confirmation.
-Card payments need a processor (Stripe) and have fees; say the word and it can be added.
+Not in this version — Zelle-with-manual-confirmation is a deliberate design
+choice. Card payments need a processor (Stripe) and have fees; Stripe support
+can be added later if needed.
 
 **What stops random people from spamming fake bookings?**
 Bookings are insert-only for the public (they can't read or change anything),
