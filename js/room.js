@@ -191,7 +191,10 @@ function renderRoom(room, terms) {
     const rent = rate * months;
     const parking = parkingOn() ? Number(PARKING_PERMIT.monthlyFee) * months : 0;
     const deposit = Number(room.deposit || 0);
-    return { months, rate, rent, parking, deposit, total: rent + parking + deposit };
+    // Round to cents: float math (e.g. 899.99 * 12) can leave dust like
+    // 10799.880000000001, which would otherwise be stored in the DB.
+    const total = Math.round((rent + parking + deposit) * 100) / 100;
+    return { months, rate, rent, parking, deposit, total };
   };
   const paintTotals = () => {
     const { months, rate, rent, parking, deposit, total } = currentTotals();

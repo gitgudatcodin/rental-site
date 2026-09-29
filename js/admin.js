@@ -170,8 +170,13 @@ async function setBookingStatus(id, act) {
     notifyBooking(id, "confirmed");
   } else {
     if (!confirm(`Cancel the booking for ${booking.guest_name}?`)) return;
+    const wasConfirmed = booking.status === "confirmed";
     const { error } = await supabase.from("bookings").update({ status: "cancelled" }).eq("id", id);
     if (error) { alert("Error: " + error.message); return; }
+    // A confirmed booking hid the room — put it back on the site.
+    if (wasConfirmed && booking.room_id) {
+      await supabase.from("rooms").update({ is_available: true }).eq("id", booking.room_id);
+    }
   }
   loadBookings();
   loadRoomAdmin();
@@ -180,7 +185,13 @@ async function setBookingStatus(id, act) {
 function exportCSV() {
   const data = filteredBookings();
   if (!data.length) { alert("Nothing to export in this view."); return; }
-  const q = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  // Guard against CSV formula injection: a tenant name like "=cmd(...)"
+  // would execute if the owner opens the export in Excel/Sheets.
+  const safe = (v) => {
+    const s = String(v ?? "");
+    return /^[=+\-@]/.test(s) ? "'" + s : s;
+  };
+  const q = (v) => `"${safe(v).replace(/"/g, '""')}"`;
   const head = ["Reference", "Submitted", "Name", "Email", "Phone", "Room", "Property", "Term (mo)", "Move-in", "Parking", "Total", "Status"];
   const lines = [head.map(q).join(",")].concat(
     data.map((b) => [

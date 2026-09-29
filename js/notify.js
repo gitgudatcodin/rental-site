@@ -11,7 +11,7 @@ export async function notifyBooking(bookingId, event) {
         bookingId,
         event, // "created" | "confirmed"
         adminEmail: SITE.contactEmail,
-        zelleTo: SITE.zelle.type === "phone" ? SITE.zelle.value : `${SITE.zelle.value} (${SITE.zelle.type})`,
+        zelleTo: `${SITE.zelle.value} (${SITE.zelle.label})`,
         siteUrl: window.location.origin,
       },
     });
