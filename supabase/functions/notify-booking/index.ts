@@ -36,7 +36,7 @@ const json = (obj: unknown, status = 200) =>
   });
 
 const money = (n: number) =>
-  "$" + Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 0 });
+  "$" + Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 const esc = (s: unknown) =>
   String(s ?? "").replace(/[&<>"']/g, (c) =>
