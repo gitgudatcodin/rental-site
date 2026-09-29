@@ -65,7 +65,7 @@ create policy "public read available rooms" on rooms
 
 drop policy if exists "public create booking" on bookings;
 create policy "public create booking" on bookings
-  for insert to anon, authenticated with check (true);
+  for insert to anon, authenticated with check (status = 'pending_payment');
 
 drop policy if exists "admin all properties" on properties;
 create policy "admin all properties" on properties
